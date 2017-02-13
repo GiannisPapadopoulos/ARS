@@ -13,23 +13,43 @@ rastrigin2d = @(x, y) 20 + x.^2 - 10 .* cos(2 .* pi .* x) + y.^2 - 10 .* cos(2 .
 %[maxFitness, bestParticle, particles] = runPso(rosenbrock2d);
 [maxFitness, bestParticle, particles] = runPso(rastrigin2d);
 
-fitness = zeros(numRuns,1);
-positions = zeros(numRuns,2);
+rasFitness = zeros(numRuns,1);
+rasPositions = zeros(numRuns,2);
+
+for i=1:numRuns;
+    [maxFitness, bestParticle, particles] = runPso(rastrigin2d);
+    rasFitness(i,1) = maxFitness;
+    rasPositions(i,1) = bestParticle(1);
+    rasPositions(i,2) = bestParticle(2);
+end
+
+rasPosX =rasPositions(:,1);
+rasPosY =rasPositions(:,2);
+
+figure
+scatter(rasPosX,rasPosY)
+
+rasAvg = mean(rasFitness);
+rasStandDev = std(rasFitness);
+
+
+rosFitness = zeros(numRuns,1);
+rosPositions = zeros(numRuns,2);
 
 for i=1:numRuns;
     [maxFitness, bestParticle, particles] = runPso(rosenbrock2d);
-    fitness(i,1) = maxFitness;
-    positions(i,1) = bestParticle(1);
-    positions(i,2) = bestParticle(2);
+    rosFitness(i,1) = maxFitness;
+    rosPositions(i,1) = bestParticle(1);
+    rosPositions(i,2) = bestParticle(2);
 end
 
-posX =positions(:,1);
-posY =positions(:,2);
+rosPosX =rosPositions(:,1);
+rosPosY =rosPositions(:,2);
 
 figure
-scatter(posX,posY)
+scatter(rosPosX,rosPosY)
 
-avg = mean(fitness);
-standDev = std(fitness);
+rosAvg = mean(rosFitness);
+rosStandDev = std(rosFitness);
 
 
