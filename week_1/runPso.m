@@ -11,10 +11,10 @@ function [maxFitness, bestParticle, particles] = runPso(func)
 
     % Limit the space to finite values for initialization [xmin, xmax,
     % ymin, ymax]
-    range = [-10, 10, -10, 10];
-    vRange = [-10,10];
+    range = [-2, 2, -2, 2];
+    vRange = [-2,2];
 
-    numIterations = 50;
+    numIterations = 200;
     numParticles = 40;
     neighborhoodSize = numParticles - 1;
     
@@ -98,8 +98,8 @@ end
 
 function [] = plotPso(particles, func)
     hold off;
-    limits = [-10,10];
-    ezsurf(func);
+    limits = [-2,2];
+    ezsurf(func, limits);
     hold on;
     for i = 1:length(particles)
         % plot(particles(i,1),particles(i,2),'r.','MarkerSize',20);
