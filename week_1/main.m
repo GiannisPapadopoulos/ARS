@@ -1,3 +1,6 @@
+%settings
+numRuns = 3
+
 % Minimum is at (1,1) (=0)
 rosenbrock2d=@(x, y) 100 .* (x.^2 - y) .^2 + (1 - x).^2;
 
@@ -9,5 +12,18 @@ rastrigin2d = @(x, y) 20 + x.^2 - 10 .* cos(2 .* pi .* x) + y.^2 - 10 .* cos(2 .
 
 [maxFitness, bestParticle, particles] = runPso(rosenbrock2d);
 %[maxFitness, bestParticle, particles] = runPso(rastrigin2d);
+
+fitness = zeros(numRuns,1);
+positions = zeros(numRuns,2);
+
+for i=1:numRuns;
+    [maxFitness, bestParticle, particles] = runPso(rosenbrock2d);
+    fitness(i,1) = maxFitness;
+    positions(i,1) = bestParticle(1);
+    positions(i,2) = bestParticle(2);
+end
+
+figure
+plot(positions, '*');
 
 

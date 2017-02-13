@@ -1,6 +1,6 @@
 function [maxFitness, bestParticle, particles] = runPso(func)
     % Delay between each step, to better visialize the particles' movement
-    delay=0.01;
+    delay=0;
     
     % The formulation is as a maximization problem, so we negate the
     % function
@@ -14,7 +14,7 @@ function [maxFitness, bestParticle, particles] = runPso(func)
     range = [-2, 2, -2, 2];
     vRange = [-2,2];
 
-    numIterations = 200;
+    numIterations = 100;
     numParticles = 40;
     neighborhoodSize = numParticles - 1;
     
