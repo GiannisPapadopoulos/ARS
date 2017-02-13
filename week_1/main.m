@@ -23,8 +23,11 @@ for i=1:numRuns;
     positions(i,2) = bestParticle(2);
 end
 
+posX =positions(:,1);
+posY =positions(:,2);
+
 figure
-plot(positions, '*');
+scatter(posX,posY)
 
 avg = mean(fitness);
 standDev = std(fitness);
