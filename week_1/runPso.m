@@ -81,7 +81,7 @@ function [maxFitness, bestParticle, particles] = runPso(func)
 %         hold on;
 %         plot([-10,10],[1,1],'b');
 %         plot([1,1],[-10,10],'b');
-        plotPso(particles, func)
+%        plotPso(particles, func)
         
 
 %         levels = 10:10:300;

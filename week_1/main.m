@@ -1,5 +1,5 @@
 %settings
-numRuns = 3
+numRuns = 1000;
 
 % Minimum is at (1,1) (=0)
 rosenbrock2d=@(x, y) 100 .* (x.^2 - y) .^2 + (1 - x).^2;
@@ -25,5 +25,8 @@ end
 
 figure
 plot(positions, '*');
+
+avg = mean(fitness);
+standDev = std(fitness);
 
 
