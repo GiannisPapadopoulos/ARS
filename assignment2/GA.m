@@ -20,7 +20,7 @@ classdef GA <handle
            end
        end
        
-       function avgFitnessPerGeneration = run(obj, numGenerations)
+       function [avgFitnessPerGeneration, stdFitnessPerGeneration] = run(obj, numGenerations)
            avgFitnessPerGeneration = zeros(1, numGenerations);
            stdFitnessPerGeneration = zeros(1, numGenerations);
            for i = 1:numGenerations
@@ -37,6 +37,9 @@ classdef GA <handle
                    newIndividuals = obj.reproduce(fittest);
                    obj.Individuals = newIndividuals;
                end
+               if mod(i,10) == 0
+                   avgFitnessPerGeneration
+               end
            end 
        end
        
@@ -50,7 +53,8 @@ classdef GA <handle
            numCollisions = 0;
            for i = 0:obj.NumSteps
                pos = robot.Position;
-               differentials = individual.steering(robot.getAllSensorDistances(obj.World));
+               distances = robot.getAllSensorDistances(obj.World);
+               differentials = individual.steering(distances);
                robot.moveRobotDifferential(differentials(1), differentials(2), obj.World);
                if robot.isCollision(obj.World)
                    numCollisions = numCollisions + 1;
