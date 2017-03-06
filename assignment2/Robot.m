@@ -38,8 +38,8 @@ classdef Robot <handle
             
             if abs(speedR - speedL) < 1.0e-6
                 %move forward
-                obj.Position(1) = obj.Position(1) + speedL * cos(obj.Orientation);
-                obj.Position(2) = obj.Position(2) + speedR * sin(obj.Orientation);
+                obj.Position(1) = obj.Position(1) + speedL * cos(deg2rad(obj.Orientation));
+                obj.Position(2) = obj.Position(2) + speedR * sin(deg2rad(obj.Orientation));
             else
                 %curve radius
                 R = (obj.radius) * (speedR + speedL) / (speedR - speedL);
@@ -100,9 +100,19 @@ classdef Robot <handle
             end
         end
         
-        function distance = getSensor(obj, id, world)
+        function distance = getSensorDistance(obj, id, world)
             sightangle = mod(obj.Orientation + obj.SensorPositions(id) , 360);            
             distance = getAngleMeasure(obj,world, sightangle);
+        end
+        
+        function distances = getAllSensorDistances(obj, world)
+            distances = zeros(5,1);
+            for id=1:5
+                %sightangle = mod(obj.Orientation + obj.SensorPositions(id) , 360);            
+                %distance = getAngleMeasure(obj,world, sightangle);
+                distances(id) = getSensorDistance(obj, id, world);
+            end
+            
         end
         
         function angleMeasure = getAngleMeasure(obj, world, sightangle)
