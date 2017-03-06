@@ -22,6 +22,7 @@ classdef GA <handle
        
        function avgFitnessPerGeneration = run(obj, numGenerations)
            avgFitnessPerGeneration = zeros(1, numGenerations);
+           stdFitnessPerGeneration = zeros(1, numGenerations);
            for i = 1:numGenerations
                i
                for j = 1: length(obj.Individuals)
@@ -29,6 +30,7 @@ classdef GA <handle
                    obj.Individuals(j).Fitness = fitness;
                end
                avgFitnessPerGeneration(i) = obj.averageFitness();
+               stdFitnessPerGeneration(i) = std([obj.Individuals.Fitness])
                obj.bestFitness()
                fittest = obj.doSelection();
                if i < numGenerations
