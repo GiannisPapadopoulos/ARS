@@ -28,7 +28,7 @@ classdef GA <handle
                    fitness = simulateAndCalculateFitness(obj, obj.Individuals(j));
                    obj.Individuals(j).Fitness = fitness;
                end
-               avgFitnessPerGeneration(i) = obj.averageFitness()
+               avgFitnessPerGeneration(i) = obj.averageFitness();
                obj.bestFitness()
                fittest = obj.doSelection();
                if i < numGenerations
@@ -36,7 +36,6 @@ classdef GA <handle
                    obj.Individuals = newIndividuals;
                end
            end 
-           avgFitnessPerGeneration
        end
        
        function fitness = simulateAndCalculateFitness(obj, individual)
@@ -93,7 +92,7 @@ classdef GA <handle
                    mutatedTheta = theta + mutation;
                    newGeneration(k).Theta = mutatedTheta;
                    k = k + 1;
-                   if k == length(obj.Individuals) % For rounding errors
+                   if k > length(obj.Individuals) % For rounding errors
                        break;
                    end
                end
