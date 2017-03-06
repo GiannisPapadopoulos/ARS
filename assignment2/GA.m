@@ -26,10 +26,10 @@ classdef GA
                i
                for j = 1: length(obj.Individuals)
                    fitness = simulateAndCalculateFitness(obj, obj.Individuals(j));
-                   fitness = 0;
                    obj.Individuals(j).Fitness = fitness;
                end
-               avgFitnessPerGeneration(i) = obj.averageFitness();
+               avgFitnessPerGeneration(i) = obj.averageFitness()
+               obj.bestFitness()
                fittest = obj.doSelection();
                newIndividuals = obj.reproduce(fittest);
                obj.Individuals = newIndividuals;
@@ -59,7 +59,7 @@ classdef GA
                else
                     deltaPos = robot.Position - pos;
                     speed = norm(deltaPos);
-                    avgSpeed = speed / obj.NumSteps;
+                    avgSpeed = avgSpeed + speed / obj.NumSteps;
                end
            end
            fitness = (obj.NumSteps - numCollisions) * avgSpeed;
