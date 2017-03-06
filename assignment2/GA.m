@@ -78,13 +78,8 @@ classdef GA <handle
            sortByFitness(obj);
            
            %Return the top 10 percent
-           
-           
-           % TODO Return fittest individuals
-           
-           selected = obj.Individuals(1:length(obj.Individuals) / 10);
-           %from = size(obj.Individuals,2)/10;
-           %selected(from:size(obj.Individuals)) = [];  %the [] value is the matlab equivalent of null for an object
+           numSelected = length(obj.Individuals) / 10;
+           selected = obj.Individuals(end-numSelected + 1:end);
        end
        
        function newGeneration = reproduce(obj, fittest)
@@ -99,6 +94,9 @@ classdef GA <handle
                    mutatedTheta = theta + mutation;
                    newGeneration(k).Theta = mutatedTheta;
                    k = k + 1;
+                   if k == length(obj.Individuals) % For rounding errors
+                       break;
+                   end
                end
            end
        end
