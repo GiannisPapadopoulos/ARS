@@ -11,7 +11,7 @@ classdef GA
        function obj = GA(initialPopulationSize)
            obj.PopulationSize = initialPopulationSize;
            obj.World = World();
-           obj.NumSteps = 30;
+           obj.NumSteps = 50;
            obj.Individuals = repmat(Individual(),1,initialPopulationSize);
            for i=1:initialPopulationSize
                % Initialize theta to random values
@@ -31,8 +31,10 @@ classdef GA
                avgFitnessPerGeneration(i) = obj.averageFitness()
                obj.bestFitness()
                fittest = obj.doSelection();
-               newIndividuals = obj.reproduce(fittest);
-               obj.Individuals = newIndividuals;
+               if i < numGenerations
+                   newIndividuals = obj.reproduce(fittest);
+                   obj.Individuals = newIndividuals;
+               end
            end 
            avgFitnessPerGeneration
        end
@@ -66,7 +68,7 @@ classdef GA
        end
        
        function sortByFitness(obj)
-           [~, ind] = sort([obj.Individuals]);
+           [~, ind] = sort([obj.Individuals.Fitness]);
            obj.Individuals = obj.Individuals(ind);
        end
        
@@ -76,8 +78,19 @@ classdef GA
        end
        
        function newGeneration = reproduce(obj, fittest)
-           % TODO Return fittest individuals
-           newGeneration = fittest;
+           numOffspring = length(obj.Individuals) / length(fittest);
+           newGeneration = repmat(Individual(),1,obj.PopulationSize);
+           k = 1;
+           for i = 1 : length(fittest)
+               theta = fittest(i).Theta;
+               for j = 1 : numOffspring
+                   % Random values in [-0.1, 0.1]
+                   mutation = rand(6,2) * 0.2 - 0.1;
+                   mutatedTheta = theta + mutation;
+                   newGeneration(k).Theta = mutatedTheta;
+                   k = k + 1;
+               end
+           end
        end
        
        function avgFitness = averageFitness(obj)
@@ -88,11 +101,13 @@ classdef GA
            avgFitness = sumFitness / length(obj.Individuals);
        end
        
-       function maxFitness = bestFitness(obj)
+       function [maxFitness, fittest] = bestFitness(obj)
            maxFitness = -Inf;
+           fittest = Individual();
            for j = 1: length(obj.Individuals)
                if obj.Individuals(j).Fitness > maxFitness
                    maxFitness = obj.Individuals(j).Fitness;
+                   fittest = obj.Individuals(j);
                end
            end
        end

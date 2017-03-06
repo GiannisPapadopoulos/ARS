@@ -102,6 +102,14 @@ classdef Robot <handle
                 
         end
         
+        function isInBounds = isInBounds(obj, world)
+            x = obj.Position(1);
+            y = obj.Position(2);
+            bounds = world.Bounds;
+            epsilon = 1E-3;
+            isInBounds = x >= bounds(1) - epsilon & x <= bounds(2) + epsilon & y >= bounds(3) -epsilon & y <= bounds(4) + epsilon;
+        end
+        
         function collDetect(obj, world)
             %get intersections of robot square with world
             x = obj.Position(1);
