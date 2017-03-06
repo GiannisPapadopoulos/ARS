@@ -74,7 +74,6 @@ classdef GA <handle
        end
        
        function selected = doSelection(obj)
-           %TODO Should I still sort or is this already done?
            sortByFitness(obj);
            
            %Return the top 10 percent
