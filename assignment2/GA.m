@@ -73,8 +73,17 @@ classdef GA
        end
        
        function selected = doSelection(obj)
+           %TODO Should I still sort or is this already done?
+           sortByFitness(obj);
+           
+           %Return the top 10 percent
+           
+           
            % TODO Return fittest individuals
+           
            selected = obj.Individuals;
+           from = size(obj.Individuals,2)/10;
+           selected(from:size(obj.Individuals)) = [];  %the [] value is the matlab equivalent of null for an object
        end
        
        function newGeneration = reproduce(obj, fittest)
