@@ -106,7 +106,7 @@ classdef Robot <handle
         end
         
         function distances = getAllSensorDistances(obj, world)
-            distances = zeros(5,1);
+            distances = zeros(1,5);
             for id=1:5
                 %sightangle = mod(obj.Orientation + obj.SensorPositions(id) , 360);            
                 %distance = getAngleMeasure(obj,world, sightangle);

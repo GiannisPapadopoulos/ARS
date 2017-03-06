@@ -6,3 +6,5 @@ r.plotRobot();
 
 % All sensor distances
 distances = r.getAllSensorDistances(w)
+
+Theta = rand(6,2);
