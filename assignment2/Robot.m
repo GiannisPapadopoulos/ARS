@@ -46,9 +46,7 @@ classdef Robot <handle
       
                 %wdt
                 wdt = (speedR - speedL)*0.01 / (2*obj.radius);
-                
-                obj.Orientation
-               
+                               
                 iccx = obj.Position(1) - R * sin(deg2rad(obj.Orientation));
                 iccy = obj.Position(2) + R * cos(deg2rad(obj.Orientation));
 
@@ -62,7 +60,7 @@ classdef Robot <handle
                 obj.Orientation = rad2deg(newAngle);
             end
             
-            collDetect(obj, world);
+            % collDetect(obj, world);
         end
         
         function moveRobotAngle(obj, angle, world)
@@ -83,6 +81,25 @@ classdef Robot <handle
         function rotateRobot(obj, angle)
             %make it turn smoothly later
             obj.Orientation = obj.Orientation + angle;
+        end
+        
+        function isCol = isCollision(obj, world)
+            %get intersections of robot square with world
+            x = obj.Position(1);
+            y = obj.Position(2);
+            
+            hitboxX = [x-obj.radius x+obj.radius x+obj.radius x-obj.radius x-obj.radius];
+            hitboxY = [y-obj.radius y-obj.radius y+obj.radius y+obj.radius y-obj.radius];
+            
+            [isx, isy] = polyxpoly(world.ObstaclesX, world.ObstaclesY, hitboxX, hitboxY);
+            if size(isx) > 0
+                %mapshow(isx,isy,'DisplayType','point','Marker','x')
+                %error('CRASH! ')
+                isCol = 1;            
+            else
+                isCol = 0;
+            end
+                
         end
         
         function collDetect(obj, world)
@@ -108,9 +125,10 @@ classdef Robot <handle
         function distances = getAllSensorDistances(obj, world)
             distances = zeros(1,5);
             for id=1:5
-                %sightangle = mod(obj.Orientation + obj.SensorPositions(id) , 360);            
-                %distance = getAngleMeasure(obj,world, sightangle);
-                distances(id) = getSensorDistance(obj, id, world);
+                sightangle = mod(obj.Orientation + obj.SensorPositions(id) , 360);            
+                distance = getAngleMeasure(obj,world, sightangle);
+                distances(id) = distance;
+                % distances(id) = getSensorDistance(obj, id, world);
             end
             
         end
@@ -128,9 +146,7 @@ classdef Robot <handle
             
             %distances = (norm(([isx - obj.Position(1),isy - obj.Position(2)] )));
             distances = sqrt(sum(abs([isx - obj.Position(1),isy - obj.Position(2)]).^2,2));
-            angleMeasure = min(distances);
-            
-            %clip sight range?
+            angleMeasure = min(distances);                  
         end
         
     end

@@ -1,6 +1,7 @@
 classdef GA
    properties
        PopulationSize;
+       NumSteps; % Used to evaluate each individual
        World;
        Individuals;
    end 
@@ -10,6 +11,7 @@ classdef GA
        function obj = GA(initialPopulationSize)
            obj.PopulationSize = initialPopulationSize;
            obj.World = World();
+           obj.NumSteps = 30;
            obj.Individuals = repmat(Individual(),1,initialPopulationSize);
            for i=1:initialPopulationSize
                % Initialize theta to random values
@@ -18,13 +20,13 @@ classdef GA
            end
        end
        
-       function run(obj, numGenerations)
-           avgFitnessPerGeneration = zeros(numGenerations , 1);
+       function avgFitnessPerGeneration = run(obj, numGenerations)
+           avgFitnessPerGeneration = zeros(1, numGenerations);
            for i = 1:numGenerations
+               i
                for j = 1: length(obj.Individuals)
-                   % TODO
-                   % Run for x steps and calculate fitness
                    fitness = simulateAndCalculateFitness(obj, obj.Individuals(j));
+                   fitness = 0;
                    obj.Individuals(j).Fitness = fitness;
                end
                avgFitnessPerGeneration(i) = obj.averageFitness();
@@ -35,13 +37,32 @@ classdef GA
            avgFitnessPerGeneration
        end
        
-       function fitness = simulateAndCalculateFitness(obj, individuals)
+       function fitness = simulateAndCalculateFitness(obj, individual)
            % random initial positions which don't collide with any walls
            initialPositions = [1 1; 5 2; 10 1.5; 15 2; 18 4; 20 8; 17 9; 10 10.75; 5 10.75; 20 2 ]; 
            r = randi([1 length(initialPositions)],1,1);
            randAngleDeg = rand(1) * 360;
            robot = Robot(initialPositions(r,1), initialPositions(r,2), randAngleDeg);
-           fitness = 0;
+           avgSpeed = 0;
+           numCollisions = 0;
+           for i = 0:obj.NumSteps
+               pos = robot.Position;
+               differentials = individual.steering(robot.getAllSensorDistances(obj.World));
+               robot.moveRobotDifferential(differentials(1), differentials(2), obj.World);
+               if robot.isCollision(obj.World)
+                   numCollisions = numCollisions + 1;
+                   % Reset to a safe position
+                    r = randi([1 length(initialPositions)],1,1);
+                    randAngleDeg = rand(1) * 360;
+                    robot.Position = [initialPositions(r,1), initialPositions(r,2)];
+                    robot.Orientation = randAngleDeg;
+               else
+                    deltaPos = robot.Position - pos;
+                    speed = norm(deltaPos);
+                    avgSpeed = speed / obj.NumSteps;
+               end
+           end
+           fitness = (obj.NumSteps - numCollisions) * avgSpeed;
        end
        
        function sortByFitness(obj)
