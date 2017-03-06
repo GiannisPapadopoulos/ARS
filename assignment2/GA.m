@@ -1,4 +1,4 @@
-classdef GA
+classdef GA <handle
    properties
        PopulationSize;
        NumSteps; % Used to evaluate each individual
@@ -68,8 +68,9 @@ classdef GA
        end
        
        function sortByFitness(obj)
-           [~, ind] = sort([obj.Individuals.Fitness]);
-           obj.Individuals = obj.Individuals(ind);
+           individuals = [obj.Individuals];
+           [~, ind] = sort([individuals.Fitness]);
+           obj.Individuals = individuals(ind);
        end
        
        function selected = doSelection(obj)
@@ -81,9 +82,9 @@ classdef GA
            
            % TODO Return fittest individuals
            
-           selected = obj.Individuals;
-           from = size(obj.Individuals,2)/10;
-           selected(from:size(obj.Individuals)) = [];  %the [] value is the matlab equivalent of null for an object
+           selected = obj.Individuals(1:length(obj.Individuals) / 10);
+           %from = size(obj.Individuals,2)/10;
+           %selected(from:size(obj.Individuals)) = [];  %the [] value is the matlab equivalent of null for an object
        end
        
        function newGeneration = reproduce(obj, fittest)
